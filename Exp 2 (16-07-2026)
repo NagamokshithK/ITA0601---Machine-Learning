@@ -1,0 +1,56 @@
+# Training data (Header + Data)
+data = [
+    ["Sky", "AirTemp", "Humidity", "Wind", "Water", "Forecast", "EnjoySport"],
+    ["Sunny", "Warm", "Normal", "Strong", "Warm", "Same", "Yes"],
+    ["Sunny", "Warm", "High", "Strong", "Warm", "Same", "Yes"],
+    ["Rainy", "Cold", "High", "Strong", "Warm", "Change", "No"],
+    ["Sunny", "Warm", "High", "Strong", "Cool", "Change", "Yes"]
+]
+
+# Separate header and training examples
+header = data[0]
+data = data[1:]
+
+# Number of attributes
+num_attr = len(data[0]) - 1
+
+# Initialize Specific (S) and General (G) hypotheses
+S = ['0'] * num_attr
+G = [['?'] * num_attr]
+
+print("Training Data:")
+for row in data:
+    print(row)
+
+# Candidate Elimination Algorithm
+for example in data:
+    if example[-1] == "Yes":  # Positive example
+        # Update Specific Hypothesis
+        for i in range(num_attr):
+            if S[i] == '0':
+                S[i] = example[i]
+            elif S[i] != example[i]:
+                S[i] = '?'
+
+        # Remove hypotheses from G inconsistent with positive example
+        G = [g for g in G if all(g[i] == '?' or g[i] == example[i]
+                                 for i in range(num_attr))]
+
+    else:  # Negative example
+        new_G = []
+        for g in G:
+            for i in range(num_attr):
+                if g[i] == '?':
+                    if S[i] != '?' and S[i] != example[i]:
+                        new_h = g.copy()
+                        new_h[i] = S[i]
+                        new_G.append(new_h)
+
+        G = new_G
+
+print("\nFinal Specific Hypothesis (S):")
+print(S)
+
+print("\nFinal General Hypothesis (G):")
+for g in G:
+    print(g)
