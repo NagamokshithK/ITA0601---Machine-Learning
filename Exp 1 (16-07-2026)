@@ -1,0 +1,28 @@
+# FIND-S Algorithm
+
+# Training data
+# Attributes: Sky, AirTemp, Humidity, Wind, Water, Forecast, EnjoySport
+training_data = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Cool', 'Change', 'Yes']
+]
+
+# Initialize the most specific hypothesis
+hypothesis = ['0'] * (len(training_data[0]) - 1)
+
+print("Initial Hypothesis:")
+print(hypothesis)
+
+# Apply FIND-S algorithm
+for example in training_data:
+    if example[-1] == "Yes":  # Consider only positive examples
+        for i in range(len(hypothesis)):
+            if hypothesis[i] == '0':
+                hypothesis[i] = example[i]
+            elif hypothesis[i] != example[i]:
+                hypothesis[i] = '?'
+
+print("\nFinal Hypothesis:")
+print(hypothesis)
